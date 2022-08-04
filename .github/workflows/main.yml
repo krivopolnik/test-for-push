@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI-CD-Pipeline-to-AWS-ElasticBeanstalk
+env: 
+  EB_PACKEGE_S3_BUCKET_NAME: "my-aws-bucket-for-test"
+  EB_APPLICATION_NAME      : "My_Flask"
+  EB_ENVERONMENT_NAME      : "Myflask-env"
+  DEPLOY_PACKEGE_NAME      : "flask_app${{ github.sha }}.zip"
+  AWS_REGION_NAME          : "eu-central-1"
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      - name: Create ZIP deployment peckege
+        run: zip -r ${{ env.DEPLOY_PACKEGE_NAME }} ./ -x *.git*
+
+
+      
